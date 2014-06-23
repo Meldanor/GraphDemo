@@ -1,7 +1,12 @@
 package de.meldanor.graphdemo.gui;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
+import de.meldanor.graphdemo.Core;
+import de.meldanor.graphdemo.game.Game;
+import de.meldanor.graphdemo.game.Game.FieldType;
 
 public class GraphCanvas extends Canvas {
 
@@ -26,6 +31,30 @@ public class GraphCanvas extends Canvas {
     @Override
     public double prefWidth(double height) {
         return getHeight();
+    }
+
+    public void draw(Game game) {
+//        System.out.println("draw");
+        GraphicsContext g = this.getGraphicsContext2D();
+//        game.getField();
+        for (int y = 0; y < game.getHeight(); ++y) {
+            for (int x = 0; x < game.getWidth(); ++x) {
+                FieldType type = game.getFieldTypeAt(x, y);
+                if (!type.equals(FieldType.FREE)) {
+                    Image backGround = Core.assetManager.getImageFor(FieldType.FREE);
+                    g.drawImage(backGround, x * 32, y * 32);
+                }
+                Image tileImage = Core.assetManager.getImageFor(type);
+                g.drawImage(tileImage, x * 32, y * 32);
+            }
+        }
+//        int x = 0;
+//        for (FieldType t : FieldType.values()) {
+//            Image image = Core.assetManager.getImageFor(t);
+//            System.out.println(image);
+//            g.drawImage(image, x, 0);
+//            x += 32;
+//        }
     }
 
 //    public void draw(Graph graph, int iterations, int temperature) {
