@@ -106,7 +106,7 @@ public class MainGUI extends Application {
     }
 
     private void generateGame() {
-        Core.currentGame = Core.gameGenerator.generate(25, (int) this.bariersSlider.getValue(), (int) this.enemiesSlider.getValue(), (int) this.boosterSlider.getValue());
+        Core.currentGame = Core.gameGenerator.generate(30, (int) this.bariersSlider.getValue(), (int) this.enemiesSlider.getValue(), (int) this.boosterSlider.getValue());
         this.canvas.draw(Core.currentGame);
         this.startButton.disableProperty().set(false);
 
@@ -124,6 +124,10 @@ public class MainGUI extends Application {
         GameGraph graph = new GameGraph(Core.currentGame);
         System.out.println("Start calc");
         List<Point> findWay = graph.findWay(Core.currentGame.getPlayerPos(), Core.currentGame.getGoalPos(), new StandardAStar());
+        if (findWay == null) {
+            System.err.println("No way found!");
+            return;
+        }
         System.out.println(findWay);
         System.out.println("Finished calc");
         this.canvas.drawPath(findWay);
