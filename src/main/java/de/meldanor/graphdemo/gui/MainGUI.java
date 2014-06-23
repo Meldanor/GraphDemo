@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import de.meldanor.graphdemo.Core;
+import de.meldanor.graphdemo.game.GameGraph;
 
 public class MainGUI extends Application {
 
@@ -25,6 +26,7 @@ public class MainGUI extends Application {
     private Slider enemiesSlider;
     private Slider boosterSlider;
     private ChoiceBox<String> algorithmType;
+    private Button startButton;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -85,10 +87,10 @@ public class MainGUI extends Application {
 
         hbox = new HBox();
         hbox.setAlignment(Pos.BASELINE_CENTER);
-        Button startButton = new Button("Start");
-        startButton.setOnAction(e -> startCalculation());
-
-        hbox.getChildren().add(startButton);
+        this.startButton = new Button("Start");
+        this.startButton.setOnAction(e -> startCalculation());
+        this.startButton.disableProperty().set(true);
+        hbox.getChildren().add(this.startButton);
 
         controlPane.getChildren().add(hbox);
         bPane.setRight(controlPane);
@@ -101,10 +103,13 @@ public class MainGUI extends Application {
     private void generateGame() {
         Core.currentGame = Core.gameGenerator.generate(25, (int) this.bariersSlider.getValue(), (int) this.enemiesSlider.getValue(), (int) this.boosterSlider.getValue());
         this.canvas.draw(Core.currentGame);
+        this.startButton.disableProperty().set(false);
+
     }
 
     private void startCalculation() {
-
+        GameGraph graph = new GameGraph(Core.currentGame);
+        graph.toString();
     }
 
 }
