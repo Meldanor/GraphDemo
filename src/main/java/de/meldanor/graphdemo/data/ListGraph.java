@@ -34,6 +34,14 @@ public class ListGraph<T> {
 //        adjacenceList.get(end.index).add(new Edge<T>(end, start));
     }
 
+    public List<Node<T>> getNeighbors(Node<T> node) {
+        List<Node<T>> neighbors = new ArrayList<>();
+        adjacenceList.get(node.index).forEach(e -> {
+            neighbors.add(e.getEnd());
+        });
+        return neighbors;
+    }
+
     public static class Edge<T> {
         private Node<T> start;
         private Node<T> end;
@@ -93,10 +101,12 @@ public class ListGraph<T> {
 
         public void setG(double g) {
             G = g;
+            this.setF(getG() + getH());
         }
 
         public void setH(double h) {
             H = h;
+            this.setF(getG() + getH());
         }
 
         public T getPayload() {

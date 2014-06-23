@@ -1,10 +1,14 @@
 package de.meldanor.graphdemo.gui;
 
+import java.awt.Point;
+import java.util.List;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import de.meldanor.graphdemo.Core;
 import de.meldanor.graphdemo.game.Game;
@@ -28,7 +32,7 @@ public class GraphCanvas extends Canvas {
         // Do nothing until game is drawn
         if (!firstDrawn)
             return;
-        
+
         int x = (int) (e.getSceneX() / 32.0);
         int y = (int) (e.getSceneY() / 32.0);
         if (e.getButton().equals(MouseButton.PRIMARY)) {
@@ -55,8 +59,10 @@ public class GraphCanvas extends Canvas {
     }
 
     public void draw(Game game) {
+
         firstDrawn = true;
         GraphicsContext g = this.getGraphicsContext2D();
+        g.setGlobalAlpha(1.0);
         for (int y = 0; y < game.getHeight(); ++y) {
 
             for (int x = 0; x < game.getWidth(); ++x) {
@@ -69,6 +75,14 @@ public class GraphCanvas extends Canvas {
                 Image tileImage = Core.assetManager.getImageFor(type);
                 g.drawImage(tileImage, x * 32, y * 32);
             }
+        }
+    }
+
+    public void drawPath(List<Point> path) {
+        for (Point p : path) {
+            GraphicsContext g = this.getGraphicsContext2D();
+            g.setFill(Color.RED);
+            g.fillRect(p.x * 32, p.y * 32, 32, 32);
         }
     }
 

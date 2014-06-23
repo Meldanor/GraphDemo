@@ -2,8 +2,10 @@ package de.meldanor.graphdemo.game;
 
 import java.awt.Point;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import de.meldanor.graphdemo.Algorithm.PathfinderAlgorithmus;
 import de.meldanor.graphdemo.data.ListGraph;
 import de.meldanor.graphdemo.data.ListGraph.Node;
 
@@ -17,7 +19,7 @@ public class GameGraph {
         graph = new ListGraph<>();
         this.nodeByPointMap = new HashMap<>();
         generateNodes(game);
-        generateEdges(game.getWidth(), game.getHeight());
+        generateEdges(game);
         System.out.println(graph);
     }
 
@@ -33,28 +35,34 @@ public class GameGraph {
         }
     }
 
-    private void generateEdges(int gameWidth, int gameHeight) {
+    private void generateEdges(Game game) {
+        int gameWidth = game.getWidth();
+        int gameHeight = game.getHeight();
         nodeByPointMap.forEach((Point p, Node<Point> n) -> {
             int x = p.x;
             int y = p.y;
             Node<Point> partner = null;
-            if (x - 1 >= 0) {
+            if (x - 1 >= 0 && game.isWalkable(x - 1, y)) {
                 partner = nodeByPointMap.get(new Point(x - 1, y));
                 graph.addEdge(n, partner);
             }
-            if (x + 1 < gameWidth) {
+            if (x + 1 < gameWidth && game.isWalkable(x + 1, y)) {
                 partner = nodeByPointMap.get(new Point(x + 1, y));
                 graph.addEdge(n, partner);
             }
-            if (y - 1 >= 0) {
+            if (y - 1 >= 0 && game.isWalkable(x, y - 1)) {
                 partner = nodeByPointMap.get(new Point(x, y - 1));
                 graph.addEdge(n, partner);
             }
-            if (y + 1 < gameHeight) {
+            if (y + 1 < gameHeight && game.isWalkable(x, y + 1)) {
                 partner = nodeByPointMap.get(new Point(x, y + 1));
                 graph.addEdge(n, partner);
             }
         });
+    }
+
+    public List<Point> findWay(Point start, Point goal, PathfinderAlgorithmus<Point> algorithmus) {
+        return algorithmus.findWay(nodeByPointMap.get(start), nodeByPointMap.get(goal), graph);
     }
 
 }

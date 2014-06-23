@@ -54,6 +54,10 @@ public class Game {
         this.field[y][x] = FieldType.PLAYER.ordinal();
     }
 
+    public Point getPlayerPos() {
+        return playerPos;
+    }
+
     public void setGoal(int x, int y) {
         if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
             return;
@@ -66,7 +70,22 @@ public class Game {
         this.field[y][x] = FieldType.GOAL.ordinal();
     }
 
+    public Point getGoalPos() {
+        return goalPos;
+    }
+
     public FieldType getFieldTypeAt(int x, int y) {
         return FieldType.getByOrdinal(field[y][x]);
+    }
+
+    public boolean isWalkable(int x, int y) {
+        FieldType t = getFieldTypeAt(x, y);
+        switch (t) {
+            case BARRIER :
+            case ENEMY :
+                return false;
+            default :
+                return true;
+        }
     }
 }

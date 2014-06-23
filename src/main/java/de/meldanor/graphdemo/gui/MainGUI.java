@@ -1,6 +1,8 @@
 package de.meldanor.graphdemo.gui;
 
+import java.awt.Point;
 import java.nio.file.Paths;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -17,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import de.meldanor.graphdemo.Core;
+import de.meldanor.graphdemo.Algorithm.StandardAStar;
 import de.meldanor.graphdemo.game.GameGraph;
 
 public class MainGUI extends Application {
@@ -27,6 +30,8 @@ public class MainGUI extends Application {
     private Slider boosterSlider;
     private ChoiceBox<String> algorithmType;
     private Button startButton;
+
+    private Scene scene;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -95,8 +100,8 @@ public class MainGUI extends Application {
         controlPane.getChildren().add(hbox);
         bPane.setRight(controlPane);
 
-        Scene scene = new Scene(bPane);
-        stage.setScene(scene);
+        this.scene = new Scene(bPane);
+        stage.setScene(this.scene);
         stage.show();
     }
 
@@ -108,8 +113,20 @@ public class MainGUI extends Application {
     }
 
     private void startCalculation() {
+        if (Core.currentGame.getPlayerPos() == null) {
+            System.err.println("No player!");
+            return;
+        }
+        if (Core.currentGame.getGoalPos() == null) {
+            System.err.println("No Goal!");
+            return;
+        }
         GameGraph graph = new GameGraph(Core.currentGame);
-        graph.toString();
+        System.out.println("Start calc");
+        List<Point> findWay = graph.findWay(Core.currentGame.getPlayerPos(), Core.currentGame.getGoalPos(), new StandardAStar());
+        System.out.println(findWay);
+        System.out.println("Finished calc");
+        this.canvas.drawPath(findWay);
     }
 
 }
