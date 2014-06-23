@@ -33,13 +33,11 @@ public class MainGUI extends Application {
 
         BorderPane bPane = new BorderPane();
         Pane p = new Pane();
-//        
-//
+
         canvas = new GraphCanvas(500, 500);
         canvas.widthProperty().bind(p.widthProperty());
         canvas.heightProperty().bind(p.heightProperty());
         p.getChildren().add(canvas);
-//        canvas = new GraphCanvas(500, 500);
         bPane.setCenter(p);
 
         VBox controlPane = new VBox(20.0);
@@ -106,5 +104,7 @@ public class MainGUI extends Application {
     }
 
     private void startCalculation() {
+
     }
+
 }

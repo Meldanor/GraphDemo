@@ -41,6 +41,9 @@ public class Game {
     }
 
     public void setPlayer(int x, int y) {
+        if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+            return;
+
         // Free old position
         if (this.playerPos != null) {
             this.field[playerPos.y][playerPos.x] = FieldType.FREE.ordinal();
@@ -52,6 +55,9 @@ public class Game {
     }
 
     public void setGoal(int x, int y) {
+        if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+            return;
+
         // Free old position
         if (this.goalPos != null) {
             this.field[goalPos.y][goalPos.x] = FieldType.FREE.ordinal();
