@@ -1,9 +1,11 @@
 package de.meldanor.graphdemo.game;
 
+import java.awt.Point;
+
 public class Game {
 
     public enum FieldType {
-        FREE, BARRIER, ENEMY, BOOSTER;
+        FREE, BARRIER, ENEMY, BOOSTER, PLAYER, GOAL;
 
         private static FieldType[] vals = values();
 
@@ -16,6 +18,9 @@ public class Game {
 
     private int width;
     private int height;
+
+    private Point playerPos;
+    private Point goalPos;
 
     public Game(int[][] field) {
         this.field = field;
@@ -34,7 +39,27 @@ public class Game {
     public int getWidth() {
         return width;
     }
-    
+
+    public void setPlayer(int x, int y) {
+        // Free old position
+        if (this.playerPos != null) {
+            this.field[playerPos.y][playerPos.x] = FieldType.FREE.ordinal();
+        }
+
+        this.playerPos = new Point(x, y);
+
+        this.field[y][x] = FieldType.PLAYER.ordinal();
+    }
+
+    public void setGoal(int x, int y) {
+        // Free old position
+        if (this.goalPos != null) {
+            this.field[goalPos.y][goalPos.x] = FieldType.FREE.ordinal();
+        }
+        this.goalPos = new Point(x, y);
+        this.field[y][x] = FieldType.GOAL.ordinal();
+    }
+
     public FieldType getFieldTypeAt(int x, int y) {
         return FieldType.getByOrdinal(field[y][x]);
     }

@@ -48,7 +48,7 @@ public class MainGUI extends Application {
 
         Label label = new Label("Hindernisse");
         controlPane.getChildren().add(label);
-        this.bariersSlider = new Slider(0, 1000, 200);
+        this.bariersSlider = new Slider(0, 300, 150);
         this.bariersSlider.setShowTickLabels(true);
         this.bariersSlider.setShowTickMarks(true);
         controlPane.getChildren().add(bariersSlider);
