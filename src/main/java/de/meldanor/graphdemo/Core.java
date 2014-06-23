@@ -1,8 +1,11 @@
 package de.meldanor.graphdemo;
 
+import de.meldanor.graphdemo.gui.MainGUI;
+import javafx.application.Application;
+
 public class Core {
 
     public static void main(String[] args) {
-        System.out.println("Hello World! This is Graph Demo by Meldanor!");
+        Application.launch(MainGUI.class, args);
     }
 }
