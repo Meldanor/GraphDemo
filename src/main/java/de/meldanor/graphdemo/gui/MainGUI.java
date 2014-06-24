@@ -70,6 +70,7 @@ public class MainGUI extends Application {
         VBox controlPane = new VBox(20.0);
         controlPane.setStyle("-fx-border-color: black;");
         controlPane.setPadding(new Insets(50, 20, 10, 10));
+        controlPane.getChildren().add(new Label("Graphics (C) by Kai Bornemann"));
 
         barriersLabel = new Label("Hindernisse 15%");
         controlPane.getChildren().add(barriersLabel);
