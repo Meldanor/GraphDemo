@@ -2,10 +2,11 @@ package de.meldanor.graphdemo.gui;
 
 import java.awt.Point;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.List;
 
 import javafx.application.Application;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -42,6 +43,8 @@ public class MainGUI extends Application {
     private RadioButton tileSize16;
     private RadioButton tileSize24;
     private RadioButton tileSize32;
+
+    private Label timeLabel;
 
     private Scene scene;
 
@@ -137,6 +140,8 @@ public class MainGUI extends Application {
         hbox.getChildren().add(this.startButton);
         controlPane.getChildren().add(hbox);
 
+        this.timeLabel = new Label();
+        controlPane.getChildren().add(timeLabel);
         bPane.setRight(controlPane);
 
         this.scene = new Scene(bPane);
@@ -169,7 +174,11 @@ public class MainGUI extends Application {
             return;
         }
         GameGraph graph = new GameGraph(Core.currentGame);
+        LocalTime now = LocalTime.now();
         List<Point> findWay = graph.findWay(Core.currentGame.getPlayerPos(), Core.currentGame.getGoalPos(), new StandardAStar());
+        LocalTime after = LocalTime.now();
+        Duration duration = Duration.between(now, after);
+        this.timeLabel.setText("Dur: " + duration.toString());
         if (findWay == null) {
             System.err.println("No way found!");
             return;

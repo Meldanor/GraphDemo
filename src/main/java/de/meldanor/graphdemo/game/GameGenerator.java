@@ -28,16 +28,9 @@ public class GameGenerator {
         }
 
         double total = width * height;
-        System.out.println(barriers);
-        System.out.println(enemies);
-        System.out.println(booster);
         barriers = (int) (total * (barriers / 100.0));
         enemies = (int) (total * (enemies / 100.0));
         booster = (int) (total * (booster / 100.0));
-        System.out.println(barriers);
-        System.out.println(enemies);
-        System.out.println(booster);
-
         generateFieldType(field, barriers, FieldType.BARRIER);
         generateFieldType(field, enemies, FieldType.ENEMY);
         generateFieldType(field, booster, FieldType.BOOSTER);
