@@ -1,35 +1,47 @@
 package de.meldanor.graphdemo.Algorithm;
 
 import java.awt.Point;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Set;
 
+import de.meldanor.graphdemo.Core;
 import de.meldanor.graphdemo.data.ListGraph;
 import de.meldanor.graphdemo.data.ListGraph.Node;
 
-public class StandardAStar implements PathfinderAlgorithmus<Point> {
+public class HeapAndHashAndBufferedAStar implements PathfinderAlgorithmus<Point> {
 
-    private List<Node<Point>> closedList;
-    private List<Node<Point>> openList;
+    private Set<Node<Point>> closedList;
+    private PriorityQueue<Node<Point>> openList;
     private Node<Point> lastNode;
 
-    public StandardAStar() {
+    public HeapAndHashAndBufferedAStar() {
     }
 
     @Override
     public List<Point> findWay(Node<Point> start, Node<Point> goal, ListGraph<Point> graph) {
-        this.closedList = new LinkedList<Node<Point>>();
-        this.openList = new LinkedList<Node<Point>>();
+        // Closed list is only a fraction of the complete graph
+
+        int initSize = (int) Math.log(graph.getVerticesSizes());
+        System.out.println(initSize);
+        this.closedList = new HashSet<Node<Point>>(initSize);
+
+        // Open list can be very big
+        // Min-Heap based on the F values
+        initSize = Core.currentGame.getHeight() * 2;
+        this.openList = new PriorityQueue<>(initSize, (n1, n2) -> {
+            return (int) (n1.getF() - n2.getF());
+        });
+
         Node<Point> current = start;
         // ADD IT TO OPEN LIST
         openList.add(current);
         while (!openList.isEmpty()) {
-            openList.sort((n1, n2) -> {
-                return (int) (n1.getF() - n2.getF());
-            });
             // REMOVE FIRST NODE
             // O(1)
-            current = openList.remove(0);
+            current = openList.poll();
 
             // ADD TO CLOSED LIST
             // O(1)
@@ -44,7 +56,6 @@ public class StandardAStar implements PathfinderAlgorithmus<Point> {
 
             // GET POSSIBLE NEXT NODES
             List<Node<Point>> neighbors = graph.getNeighbors(current);
-//            Node[] neighbors = level.getNeighbors(current, onlyFree);
 
             // CHECK POSSIBILITIES
             for (Node<Point> neighbor : neighbors) {
@@ -77,7 +88,6 @@ public class StandardAStar implements PathfinderAlgorithmus<Point> {
         }
         return null;
     }
-
     // GENERATE THE FOUND PATH
     public List<Point> getPath() {
 

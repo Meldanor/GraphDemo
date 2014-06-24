@@ -3,33 +3,36 @@ package de.meldanor.graphdemo.Algorithm;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import de.meldanor.graphdemo.data.ListGraph;
 import de.meldanor.graphdemo.data.ListGraph.Node;
 
-public class StandardAStar implements PathfinderAlgorithmus<Point> {
+public class HeapAStar implements PathfinderAlgorithmus<Point> {
 
     private List<Node<Point>> closedList;
-    private List<Node<Point>> openList;
+    private PriorityQueue<Node<Point>> openList;
     private Node<Point> lastNode;
 
-    public StandardAStar() {
+    public HeapAStar() {
     }
 
     @Override
     public List<Point> findWay(Node<Point> start, Node<Point> goal, ListGraph<Point> graph) {
         this.closedList = new LinkedList<Node<Point>>();
-        this.openList = new LinkedList<Node<Point>>();
+
+        // Min-Heap based on the F values
+        this.openList = new PriorityQueue<>((n1, n2) -> {
+            return (int) (n1.getF() - n2.getF());
+        });
+
         Node<Point> current = start;
         // ADD IT TO OPEN LIST
         openList.add(current);
         while (!openList.isEmpty()) {
-            openList.sort((n1, n2) -> {
-                return (int) (n1.getF() - n2.getF());
-            });
             // REMOVE FIRST NODE
             // O(1)
-            current = openList.remove(0);
+            current = openList.poll();
 
             // ADD TO CLOSED LIST
             // O(1)
@@ -44,7 +47,6 @@ public class StandardAStar implements PathfinderAlgorithmus<Point> {
 
             // GET POSSIBLE NEXT NODES
             List<Node<Point>> neighbors = graph.getNeighbors(current);
-//            Node[] neighbors = level.getNeighbors(current, onlyFree);
 
             // CHECK POSSIBILITIES
             for (Node<Point> neighbor : neighbors) {
@@ -77,7 +79,6 @@ public class StandardAStar implements PathfinderAlgorithmus<Point> {
         }
         return null;
     }
-
     // GENERATE THE FOUND PATH
     public List<Point> getPath() {
 

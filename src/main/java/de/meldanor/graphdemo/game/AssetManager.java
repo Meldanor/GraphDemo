@@ -12,11 +12,13 @@ import javafx.scene.image.Image;
 
 public class AssetManager {
 
+    public Map<String, Image> images8;
     public Map<String, Image> images16;
     public Map<String, Image> images24;
     public Map<String, Image> images32;
 
     public AssetManager() {
+        this.images8 = new HashMap<String, Image>();
         this.images16 = new HashMap<String, Image>();
         this.images24 = new HashMap<String, Image>();
         this.images32 = new HashMap<String, Image>();
@@ -26,7 +28,10 @@ public class AssetManager {
         Files.list(dir).forEach(e -> {
             String fileName = e.getFileName().toString();
             try {
-                Image image = new Image(e.toUri().toURL().toString(), 16, 16, true, true);
+                Image image = new Image(e.toUri().toURL().toString(), 8, 8, true, true);
+                images8.put(fileName.substring(0, fileName.lastIndexOf('.')).toUpperCase(), image);
+
+                image = new Image(e.toUri().toURL().toString(), 16, 16, true, true);
                 images16.put(fileName.substring(0, fileName.lastIndexOf('.')).toUpperCase(), image);
 
                 image = new Image(e.toUri().toURL().toString(), 24, 24, true, true);
@@ -42,6 +47,8 @@ public class AssetManager {
 
     public Image getImageFor(FieldType fieldType) {
         switch (Core.TILESIZE) {
+            case 8 :
+                return images8.get(fieldType.name());
             case 16 :
                 return images16.get(fieldType.name());
             case 24 :

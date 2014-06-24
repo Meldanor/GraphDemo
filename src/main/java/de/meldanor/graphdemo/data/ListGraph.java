@@ -7,6 +7,9 @@ public class ListGraph<T> {
 
     private List<List<Edge<T>>> adjacenceList;
 
+    private int verticesSizes;
+    private int edgesSize;
+
     public ListGraph() {
         adjacenceList = new ArrayList<List<Edge<T>>>();
     }
@@ -18,6 +21,7 @@ public class ListGraph<T> {
         }
         n.index = adjacenceList.size();
         adjacenceList.add(new ArrayList<>());
+        ++this.verticesSizes;
     }
 
     public void addEdge(Node<T> start, Node<T> end) {
@@ -31,6 +35,7 @@ public class ListGraph<T> {
         }
 
         adjacenceList.get(start.index).add(new Edge<T>(start, end));
+        ++this.edgesSize;
     }
 
     public List<Node<T>> getNeighbors(Node<T> node) {
@@ -39,6 +44,13 @@ public class ListGraph<T> {
             neighbors.add(e.getEnd());
         });
         return neighbors;
+    }
+
+    public int getEdgesSize() {
+        return edgesSize;
+    }
+    public int getVerticesSizes() {
+        return verticesSizes;
     }
 
     public static class Edge<T> {
@@ -118,6 +130,27 @@ public class ListGraph<T> {
 
         public void setPreviosNode(Node<T> previosNode) {
             this.previosNode = previosNode;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + index;
+            result = prime * result + ((payload == null) ? 0 : payload.hashCode());
+            return result;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            return index == ((Node<T>) obj).index;
         }
 
         @Override

@@ -23,6 +23,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import de.meldanor.graphdemo.Core;
+import de.meldanor.graphdemo.Algorithm.HeapAStar;
+import de.meldanor.graphdemo.Algorithm.HeapAndHashAStar;
+import de.meldanor.graphdemo.Algorithm.HeapAndHashAndBufferedAStar;
+import de.meldanor.graphdemo.Algorithm.PathfinderAlgorithmus;
 import de.meldanor.graphdemo.Algorithm.StandardAStar;
 import de.meldanor.graphdemo.game.GameGraph;
 
@@ -40,6 +44,7 @@ public class MainGUI extends Application {
     private ChoiceBox<String> algorithmType;
     private Button startButton;
 
+    private RadioButton tileSize8;
     private RadioButton tileSize16;
     private RadioButton tileSize24;
     private RadioButton tileSize32;
@@ -92,7 +97,7 @@ public class MainGUI extends Application {
 
         sizeLabel = new Label("Size 10");
         controlPane.getChildren().add(sizeLabel);
-        this.sizeSlider = new Slider(25, 100, 10);
+        this.sizeSlider = new Slider(25, 150, 10);
         this.sizeSlider.setMajorTickUnit(5);
         this.sizeSlider.setShowTickLabels(true);
         this.sizeSlider.setShowTickMarks(true);
@@ -104,6 +109,8 @@ public class MainGUI extends Application {
         final ToggleGroup group = new ToggleGroup();
         HBox hbox = new HBox();
         hbox.setSpacing(15);
+        tileSize8 = new RadioButton("8");
+        tileSize8.setToggleGroup(group);
         tileSize16 = new RadioButton("16");
         tileSize16.setToggleGroup(group);
         tileSize24 = new RadioButton("24");
@@ -111,7 +118,7 @@ public class MainGUI extends Application {
         tileSize32 = new RadioButton("32");
         tileSize32.setToggleGroup(group);
         tileSize32.setSelected(true);
-        hbox.getChildren().addAll(tileSize16, tileSize24, tileSize32);
+        hbox.getChildren().addAll(tileSize8, tileSize16, tileSize24, tileSize32);
 
         controlPane.getChildren().add(hbox);
 
@@ -150,8 +157,9 @@ public class MainGUI extends Application {
     }
 
     private void generateGame() {
-//        Core.TILESIZE = 
-        if (this.tileSize16.isSelected())
+        if (this.tileSize8.isSelected())
+            Core.TILESIZE = 8;
+        else if (this.tileSize16.isSelected())
             Core.TILESIZE = 16;
         else if (this.tileSize24.isSelected())
             Core.TILESIZE = 24;
@@ -173,9 +181,26 @@ public class MainGUI extends Application {
             System.err.println("No Goal!");
             return;
         }
+
+        PathfinderAlgorithmus<Point> algorithm = null;
+        switch (this.algorithmType.getSelectionModel().getSelectedIndex()) {
+            case 0 :
+                algorithm = new StandardAStar();
+                break;
+            case 1 :
+                algorithm = new HeapAStar();
+                break;
+            case 2 :
+                algorithm = new HeapAndHashAStar();
+                break;
+            case 3 :
+                algorithm = new HeapAndHashAndBufferedAStar();
+                break;
+        }
+        this.canvas.draw(Core.currentGame);
         GameGraph graph = new GameGraph(Core.currentGame);
         LocalTime now = LocalTime.now();
-        List<Point> findWay = graph.findWay(Core.currentGame.getPlayerPos(), Core.currentGame.getGoalPos(), new StandardAStar());
+        List<Point> findWay = graph.findWay(Core.currentGame.getPlayerPos(), Core.currentGame.getGoalPos(), algorithm);
         LocalTime after = LocalTime.now();
         Duration duration = Duration.between(now, after);
         this.timeLabel.setText("Dur: " + duration.toString());

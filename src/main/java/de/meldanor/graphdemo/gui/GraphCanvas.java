@@ -82,7 +82,7 @@ public class GraphCanvas extends Canvas {
     public void drawPath(List<Point> path) {
         for (Point p : path) {
             GraphicsContext g = this.getGraphicsContext2D();
-            g.setFill(new Color(1, 0, 0, 0.25));
+            g.setFill(new Color(0, 1, 0, 0.25));
             g.fillRect(p.x * Core.TILESIZE, p.y * Core.TILESIZE, Core.TILESIZE, Core.TILESIZE);
         }
     }
