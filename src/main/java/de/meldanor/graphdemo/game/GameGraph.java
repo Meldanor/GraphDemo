@@ -8,6 +8,7 @@ import java.util.Map;
 import de.meldanor.graphdemo.Algorithm.PathfinderAlgorithmus;
 import de.meldanor.graphdemo.data.ListGraph;
 import de.meldanor.graphdemo.data.ListGraph.Node;
+import de.meldanor.graphdemo.game.Game.FieldType;
 
 public class GameGraph {
 
@@ -20,7 +21,6 @@ public class GameGraph {
         this.nodeByPointMap = new HashMap<>();
         generateNodes(game);
         generateEdges(game);
-        System.out.println(graph);
     }
 
     private void generateNodes(Game game) {
@@ -58,6 +58,29 @@ public class GameGraph {
                 partner = nodeByPointMap.get(new Point(x, y + 1));
                 graph.addEdge(n, partner);
             }
+
+            double distanceToGoal = p.distanceSq(game.getGoalPos());
+
+            FieldType fieldType = game.getFieldTypeAt(x, y);
+            switch (fieldType) {
+                case ENEMY :
+                    distanceToGoal *= 2.0;
+                    break;
+                case BOOSTER :
+                    distanceToGoal *= 0.5;
+                    break;
+                default :
+                    break;
+            }
+
+            List<Node<Point>> neighbors = graph.getNeighbors(n);
+            for (Node<Point> node : neighbors) {
+                if (game.getFieldTypeAt(node.getPayload()).equals(FieldType.ENEMY)) {
+                    distanceToGoal *= 1.5;
+                }
+            }
+
+            n.setH(distanceToGoal);
         });
     }
 

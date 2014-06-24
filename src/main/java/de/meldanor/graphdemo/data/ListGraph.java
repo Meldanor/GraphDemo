@@ -31,7 +31,6 @@ public class ListGraph<T> {
         }
 
         adjacenceList.get(start.index).add(new Edge<T>(start, end));
-//        adjacenceList.get(end.index).add(new Edge<T>(end, start));
     }
 
     public List<Node<T>> getNeighbors(Node<T> node) {

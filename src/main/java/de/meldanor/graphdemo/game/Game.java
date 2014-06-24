@@ -78,11 +78,14 @@ public class Game {
         return FieldType.getByOrdinal(field[y][x]);
     }
 
+    public FieldType getFieldTypeAt(Point p) {
+        return getFieldTypeAt(p.x, p.y);
+    }
+
     public boolean isWalkable(int x, int y) {
         FieldType t = getFieldTypeAt(x, y);
         switch (t) {
             case BARRIER :
-            case ENEMY :
                 return false;
             default :
                 return true;

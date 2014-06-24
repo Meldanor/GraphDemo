@@ -122,14 +122,11 @@ public class MainGUI extends Application {
             return;
         }
         GameGraph graph = new GameGraph(Core.currentGame);
-        System.out.println("Start calc");
         List<Point> findWay = graph.findWay(Core.currentGame.getPlayerPos(), Core.currentGame.getGoalPos(), new StandardAStar());
         if (findWay == null) {
             System.err.println("No way found!");
             return;
         }
-        System.out.println(findWay);
-        System.out.println("Finished calc");
         this.canvas.drawPath(findWay);
     }
 
