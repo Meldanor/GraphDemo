@@ -33,8 +33,8 @@ public class GraphCanvas extends Canvas {
         if (!firstDrawn)
             return;
 
-        int x = (int) (e.getSceneX() / 32.0);
-        int y = (int) (e.getSceneY() / 32.0);
+        int x = (int) (e.getSceneX() / Core.TILESIZE);
+        int y = (int) (e.getSceneY() / Core.TILESIZE);
         if (e.getButton().equals(MouseButton.PRIMARY)) {
             Core.currentGame.setPlayer(x, y);
         } else if (e.getButton().equals(MouseButton.SECONDARY)) {
@@ -62,18 +62,19 @@ public class GraphCanvas extends Canvas {
 
         firstDrawn = true;
         GraphicsContext g = this.getGraphicsContext2D();
-        g.setGlobalAlpha(1.0);
+        
+        g.clearRect(0, 0, getWidth(), getHeight());
         for (int y = 0; y < game.getHeight(); ++y) {
 
             for (int x = 0; x < game.getWidth(); ++x) {
-
+                
                 FieldType type = game.getFieldTypeAt(x, y);
                 if (!type.equals(FieldType.FREE)) {
                     Image backGround = Core.assetManager.getImageFor(FieldType.FREE);
-                    g.drawImage(backGround, x * 32, y * 32);
+                    g.drawImage(backGround, x * Core.TILESIZE, y * Core.TILESIZE);
                 }
                 Image tileImage = Core.assetManager.getImageFor(type);
-                g.drawImage(tileImage, x * 32, y * 32);
+                g.drawImage(tileImage, x * Core.TILESIZE, y * Core.TILESIZE);
             }
         }
     }
@@ -82,7 +83,7 @@ public class GraphCanvas extends Canvas {
         for (Point p : path) {
             GraphicsContext g = this.getGraphicsContext2D();
             g.setFill(new Color(1, 0, 0, 0.25));
-            g.fillRect(p.x * 32, p.y * 32, 32, 32);
+            g.fillRect(p.x * Core.TILESIZE, p.y * Core.TILESIZE, Core.TILESIZE, Core.TILESIZE);
         }
     }
 

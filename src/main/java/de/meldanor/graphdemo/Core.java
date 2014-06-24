@@ -13,6 +13,8 @@ public class Core {
     public static GameGenerator gameGenerator;
     public static Game currentGame;
     public static AssetManager assetManager;
+    
+    public static int TILESIZE = 16;
 
     public static void main(String[] args) throws URISyntaxException, IOException {
 
